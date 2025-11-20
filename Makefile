@@ -25,7 +25,7 @@ hf-login:
 	@echo "Setting up deployment environment..."
 	python -m pip install -U huggingface_hub
 	@echo "Logging into Hugging Face..."
-	huggingface-cli login --token $(HF) --add-to-git-credential
+	@python -c "from huggingface_hub import login; login(token='$(HF)', add_to_git_credential=True)"
 
 push-hub:
 	@echo "Uploading files to Hugging Face Hub..."
