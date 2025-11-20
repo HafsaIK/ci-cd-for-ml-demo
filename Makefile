@@ -30,35 +30,29 @@ hf-login:
 push-hub:
 	@echo "Uploading files to Hugging Face Hub..."
 	python - <<'PY'
-
-from huggingface_hub import upload_folder
-
-repo_id = "Hafsa7/iris_Classification"
-
-upload_folder(
-    repo_id=repo_id,
-    repo_type="space",
-    folder_path="./App",
-    commit_message="Sync App files"
-)
-
-upload_folder(
-    repo_id=repo_id,
-    repo_type="space",
-    folder_path="./Model",
-    path_in_repo="Model",
-    commit_message="Sync Model"
-)
-
-upload_folder(
-    repo_id=repo_id,
-    repo_type="space",
-    folder_path="./Results",
-    path_in_repo="Results",
-    commit_message="Sync Metrics"
-)
-
-print("✔ Upload finished successfully.")
-PY
+	from huggingface_hub import upload_folder
+	repo_id = "Hafsa7/iris_Classification"
+	upload_folder(
+	    repo_id=repo_id,
+	    repo_type="space",
+	    folder_path="./App",
+	    commit_message="Sync App files"
+	)
+	upload_folder(
+	    repo_id=repo_id,
+	    repo_type="space",
+	    folder_path="./Model",
+	    path_in_repo="Model",
+	    commit_message="Sync Model"
+	)
+	upload_folder(
+	    repo_id=repo_id,
+	    repo_type="space",
+	    folder_path="./Results",
+	    path_in_repo="Results",
+	    commit_message="Sync Metrics"
+	)
+	print("✔ Upload finished successfully.")
+	PY
 
 deploy: hf-login push-hub
