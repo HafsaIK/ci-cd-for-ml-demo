@@ -11,10 +11,8 @@ train:
 eval:
 	echo "## Model Metrics" > report.md
 	cat ./Results/metrics.txt >> report.md
-	
 	echo '\n## Confusion Matrix Plot' >> report.md
 	echo '![Confusion Matrix](./Results/model_results.png)' >> report.md
-	
 	-cml comment create report.md || echo "✓ Report generated successfully"
 
 update-branch:
@@ -36,7 +34,6 @@ from huggingface_hub import upload_folder
 
 repo_id = "Hafsa7/iris_Classification"
 
-# Upload App folder
 upload_folder(
     repo_id=repo_id,
     repo_type="space",
@@ -44,7 +41,6 @@ upload_folder(
     commit_message="Sync App files"
 )
 
-# Upload Model folder under /Model
 upload_folder(
     repo_id=repo_id,
     repo_type="space",
@@ -53,7 +49,6 @@ upload_folder(
     commit_message="Sync Model"
 )
 
-# Upload Results folder under /Results
 upload_folder(
     repo_id=repo_id,
     repo_type="space",
