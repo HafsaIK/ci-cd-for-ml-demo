@@ -1,6 +1,6 @@
 install:
-	pip install --upgrade pip &&\
-	pip install -r requirements.txt
+	python -m pip install --upgrade pip
+	python -m pip install -r requirements.txt
 
 format:
 	black *.py
@@ -25,13 +25,44 @@ update-branch:
 
 hf-login:
 	@echo "Setting up deployment environment..."
-	pip install -U "huggingface_hub[cli]"
+	python -m pip install -U huggingface_hub
 	@echo "Logging into Hugging Face..."
-	huggingface-cli login --token $(HF) --add-to-git-credential
+	python -m huggingface_hub.cli login --token $(HF) --add-to-git-credential
 
 push-hub:
-	huggingface-cli upload Hafsa7/iris_Classification ./App --repo-type=space --commit-message="Sync App files"
-	huggingface-cli upload Hafsa7/iris_Classification ./Model /Model --repo-type=space --commit-message="Sync Model"
-	huggingface-cli upload Hafsa7/iris_Classification ./Results /Metrics --repo-type=space --commit-message="Sync Metrics"
+	@echo "Uploading files to Hugging Face Hub..."
+	python - <<'PY'
+from huggingface_hub import upload_folder
+
+repo_id = "Hafsa7/iris_Classification"
+
+# Upload App folder
+upload_folder(
+    repo_id=repo_id,
+    repo_type="space",
+    folder_path="./App",
+    commit_message="Sync App files"
+)
+
+# Upload Model folder under /Model
+upload_folder(
+    repo_id=repo_id,
+    repo_type="space",
+    folder_path="./Model",
+    path_in_repo="Model",
+    commit_message="Sync Model"
+)
+
+# Upload Results folder under /Results
+upload_folder(
+    repo_id=repo_id,
+    repo_type="space",
+    folder_path="./Results",
+    path_in_repo="Results",
+    commit_message="Sync Metrics"
+)
+
+print("✔ Upload finished successfully.")
+PY
 
 deploy: hf-login push-hub
